@@ -8,8 +8,31 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
+        <audio id="bgMusic" loop autoplay muted>
+            <source src="/sound/landscape-with-a-fairy.mp3" type="audio/mpeg">
+            Your browser doesn't support audio.
+        </audio>
+
+        <p id="playButton" style="display: none;">play music</p>
+
         <img src="/images/cardstack-tz-trans.gif" alt="a hollerith punch card with a secret love letter to t+z" width="80%" id="hollerith">
 
         <p id="rotate-phone"><span class="arrow-rotate">⤻</span> rotate your phone<span class="arrow-rotate">⤺</span></p>
+
+        <script>
+            const audio = document.getElementById('bgMusic');
+            const playButton = document.getElementById('playButton');
+            audio.play()
+                .then(() => {
+                audio.muted = false;
+                })
+                .catch(() => {
+                playButton.style.display = 'block';
+                playButton.onclick = () => {
+                    audio.play();
+                    audio.muted = false;
+                };
+                });
+        </script>
     </body>
 </html>
