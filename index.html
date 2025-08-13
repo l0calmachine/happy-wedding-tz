@@ -22,17 +22,26 @@
         <script>
             const audio = document.getElementById('bgMusic');
             const playButton = document.getElementById('playButton');
-            audio.play()
-                .then(() => {
-                audio.muted = false;
-                })
-                .catch(() => {
-                playButton.style.display = 'block';
-                playButton.onclick = () => {
-                    audio.play();
-                    audio.muted = false;
-                };
-                });
+            audio.style.display = 'none';
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        playButton.style.display = 'none';
+                    })
+                    .catch(error => {
+                        playButton.style.display = 'block';
+                        playButton.addEventListener('click', () => {
+                            audio.play()
+                                .then(() => {
+                                    playButton.style.display = 'none';
+                                })
+                                .catch(e => {
+                                    console.error('Playback failed:', e);
+                                });
+                        }, { once: true });
+                    });
+            }
         </script>
     </body>
 </html>
