@@ -8,40 +8,77 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <audio id="bgMusic" loop autoplay muted>
-            <source src="/sound/landscape-with-a-fairy.mp3" type="audio/mpeg">
-            Your browser doesn't support audio.
-        </audio>
-
-        <p id="playButton" style="display: none;">play music</p>
+        <div class="classic-audio-player">
+            <audio id="classic-audio"></audio>
+            <div class="controls">
+                <button class="play-pause" title="Play/Pause">►</button>
+                <button class="stop" title="Stop">■</button>
+                <div class="time-display">0:00</div>
+                <input type="range" class="seek-slider" value="0" max="100">
+                <button class="mute" title="Mute">🔊</button><!-- U+1F50A + U+FE0E -->
+            </div>
+        </div>
 
         <img src="/images/cardstack-tz-trans.gif" alt="a hollerith punch card with a secret love letter to t+z" width="80%" id="hollerith">
 
         <p id="rotate-phone"><span class="arrow-rotate">⤻</span> rotate your phone<span class="arrow-rotate">⤺</span></p>
 
         <script>
-            const audio = document.getElementById('bgMusic');
-            const playButton = document.getElementById('playButton');
-            audio.style.display = 'none';
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
-                        playButton.style.display = 'none';
-                    })
-                    .catch(error => {
-                        playButton.style.display = 'block';
-                        playButton.addEventListener('click', () => {
-                            audio.play()
-                                .then(() => {
-                                    playButton.style.display = 'none';
-                                })
-                                .catch(e => {
-                                    console.error('Playback failed:', e);
-                                });
-                        }, { once: true });
-                    });
+            const audio = document.getElementById('classic-audio');
+            const playPauseBtn = document.querySelector('.play-pause');
+            const stopBtn = document.querySelector('.stop');
+            const muteBtn = document.querySelector('.mute');
+            const seekSlider = document.querySelector('.seek-slider');
+            const volumeSlider = document.querySelector('.volume-slider');
+            const timeDisplay = document.querySelector('.time-display');
+
+            audio.src = '/sound/landscape-with-a-fairy.mp3';
+
+            playPauseBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                playPauseBtn.textContent = '❚❚';
+            } else {
+                audio.pause();
+                playPauseBtn.textContent = '►';
             }
+            });
+
+            stopBtn.addEventListener('click', () => {
+            audio.pause();
+            audio.currentTime = 0;
+            playPauseBtn.textContent = '►';
+            });
+
+            muteBtn.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            muteBtn.textContent = audio.muted ? '🔇' : '🔊';
+            });
+
+            volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value / 100;
+            });
+
+            seekSlider.addEventListener('input', () => {
+            const seekTime = audio.duration * (seekSlider.value / 100);
+            audio.currentTime = seekTime;
+            });
+
+            audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const value = (100 / audio.duration) * audio.currentTime;
+                seekSlider.value = value;
+                
+                const minutes = Math.floor(audio.currentTime / 60);
+                const seconds = Math.floor(audio.currentTime % 60);
+                timeDisplay.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            }
+            });
+
+            audio.addEventListener('ended', () => {
+            playPauseBtn.textContent = '►';
+            seekSlider.value = 0;
+            });
         </script>
     </body>
 </html>
