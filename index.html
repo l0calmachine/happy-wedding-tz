@@ -29,7 +29,6 @@
             const stopBtn = document.querySelector('.stop');
             const muteBtn = document.querySelector('.mute');
             const seekSlider = document.querySelector('.seek-slider');
-            const volumeSlider = document.querySelector('.volume-slider');
             const timeDisplay = document.querySelector('.time-display');
 
             audio.src = '/sound/landscape-with-a-fairy.mp3';
@@ -55,9 +54,6 @@
             muteBtn.textContent = audio.muted ? '🔇' : '🔊';
             });
 
-            volumeSlider.addEventListener('input', () => {
-            audio.volume = volumeSlider.value / 100;
-            });
 
             seekSlider.addEventListener('input', () => {
             const seekTime = audio.duration * (seekSlider.value / 100);

@@ -104,7 +104,17 @@ p {
 .mute {
   font-family: "Segoe UI Symbol", "MS UI Symbol", sans-serif;
   font-size: 13px !important;
-  color: black;
+  color: black !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: black !important;
+  -webkit-font-smoothing: none !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .mute {
+    font-variant-emoji: text;
+    text-rendering: optimizeLegibility;
+  }
 }
 
 .arrow-rotate {
