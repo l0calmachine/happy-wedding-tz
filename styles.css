@@ -36,6 +36,7 @@ audio {
 }
 
 .classic-audio-player {
+  position: absolute;
   font-family: "MS Sans Serif", sans-serif;
   font-size: 12px;
   width: 300px;
@@ -44,6 +45,7 @@ audio {
   border: 2px solid;
   border-color: #ffffff #808080 #808080 #ffffff;
   box-shadow: inset 1px 1px 0px #000000;
+  z-index: 100;
 }
 
 .classic-audio-player audio {

@@ -24,24 +24,49 @@
         <p id="rotate-phone"><span class="arrow-rotate">⤻</span> rotate your phone<span class="arrow-rotate">⤺</span></p>
 
         <script>
-            const audio = document.getElementById('classic-audio');
-            const playPauseBtn = document.querySelector('.play-pause');
-            const stopBtn = document.querySelector('.stop');
-            const muteBtn = document.querySelector('.mute');
-            const seekSlider = document.querySelector('.seek-slider');
-            const timeDisplay = document.querySelector('.time-display');
+    const audio = document.getElementById('classic-audio');
+    
+    audio.preload = "auto";
+    audio.src = '/sound/landscape-with-a-fairy.mp3';
+    audio.volume = 0.7;
 
-            audio.src = '/sound/landscape-with-a-fairy.mp3';
+    const playPauseBtn = document.querySelector('.play-pause');
+    const stopBtn = document.querySelector('.stop');
+    const muteBtn = document.querySelector('.mute');
+    const seekSlider = document.querySelector('.seek-slider');
+    const timeDisplay = document.querySelector('.time-display');
 
-            playPauseBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
+    playPauseBtn.addEventListener('click', async () => {
+        if (audio.paused) {
+            try {
+                await audio.play();
                 playPauseBtn.textContent = '❚❚';
-            } else {
-                audio.pause();
-                playPauseBtn.textContent = '►';
+            } catch (err) {
+                console.log("Playback failed, trying muted:", err);
+                audio.muted = true;
+                await audio.play();
+                audio.muted = false;
             }
-            });
+        } else {
+            audio.pause();
+            playPauseBtn.textContent = '►';
+        }
+    });
+
+        audio.addEventListener('canplay', () => {
+            console.log("Audio is ready to play");
+        });
+
+        audio.addEventListener('error', () => {
+            console.error("Audio error:", audio.error);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                playPauseBtn.click();
+            }
+        });
 
             stopBtn.addEventListener('click', () => {
             audio.pause();
@@ -75,6 +100,14 @@
             playPauseBtn.textContent = '►';
             seekSlider.value = 0;
             });
+
+                audio.addEventListener('canplay', () => {
+        console.log("Audio is ready to play");
+    });
+
+    audio.addEventListener('error', () => {
+        console.error("Audio error:", audio.error);
+    });
         </script>
     </body>
 </html>
