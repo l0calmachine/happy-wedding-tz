@@ -31,6 +31,10 @@ p {
     transform: rotate(-10deg);
 }
 
+audio {
+  display: none !important;
+}
+
 .classic-audio-player {
   font-family: "MS Sans Serif", sans-serif;
   font-size: 12px;
